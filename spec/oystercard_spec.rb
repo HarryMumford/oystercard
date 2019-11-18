@@ -6,4 +6,11 @@ RSpec.describe Oystercard do
       expect(subject.balance).to be 0
     end
   end
+
+  describe '#top_up' do
+    it "returns balance after topping up specified amount" do
+      amount = 5
+      expect(subject.top_up(amount)).to eq("card was topped up by £#{amount}")
+    end
+  end
 end
