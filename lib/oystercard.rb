@@ -4,7 +4,7 @@ class Oystercard
   MAXIMUM_LIMIT = 90
   MINIMUM_AMOUNT_FOR_JOURNEY = 1
   CANNOT_EXCEED_MAXIMUM_LIMIT = "operation denied: this transaction will exceed the £#{MAXIMUM_LIMIT} limit"
-  INSUFFICIENT_FUNDS = "angry beep"
+  INSUFFICIENT_FUNDS = "operation denied: card must have #{MINIMUM_AMOUNT_FOR_JOURNEY} to travel"
 
   def initialize
     @balance = 0
@@ -19,21 +19,23 @@ class Oystercard
     "card was topped up by £#{amount}"
   end
 
-  def deduct(amount)
-    @balance -= amount
-    "beep"
-  end
-
   def touch_in
     raise INSUFFICIENT_FUNDS unless balance >= MINIMUM_AMOUNT_FOR_JOURNEY
     @in_journey = true
   end
 
   def touch_out
+    deduct(MINIMUM_AMOUNT_FOR_JOURNEY)
     @in_journey = false
   end
 
   def in_journey?
     in_journey
   end
-end
+
+  private
+
+  def deduct(amount)
+    @balance -= amount
+    "beep"
+  end

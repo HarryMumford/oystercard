@@ -36,14 +36,13 @@ RSpec.describe Oystercard do
   describe '#deduct' do
     let(:amount) { 5 }
 
-    it "returns beep after deducting specified amount" do
-      
-      expect(subject.deduct(amount)).to eq("beep")
-    end
+    # it "returns beep after deducting specified amount" do
+    #   expect(subject.deduct(amount)).to eq("beep")
+    # end
 
-    it 'decreases the card balance by the specified amount' do
-      expect{test_oystercard.deduct(amount)}.to change { test_oystercard.balance }.by -amount
-    end
+    # it 'decreases the card balance by the specified amount' do
+    #   expect{test_oystercard.deduct(amount)}.to change { test_oystercard.balance }.by -amount
+    # end
   end
 
   context 'when on a journey' do
@@ -62,6 +61,13 @@ RSpec.describe Oystercard do
       test_oystercard.touch_in
       test_oystercard.touch_out
       expect(test_oystercard.in_journey?).to be false
+    end
+  end
+
+  context 'after a journey' do
+    it 'should charge the card for the minumum fare' do
+      test_oystercard.touch_in
+      expect { test_oystercard.touch_out }.to change { test_oystercard.balance }.by -Oystercard::MINIMUM_AMOUNT_FOR_JOURNEY
     end
   end
 
