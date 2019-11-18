@@ -15,4 +15,9 @@ class Oystercard
     @balance += amount
     "card was topped up by £#{amount}"
   end
+
+  def deduct(amount)
+    @balance -= amount
+    "beep"
+  end
 end
