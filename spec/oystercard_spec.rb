@@ -2,6 +2,9 @@ require 'oystercard'
 
 RSpec.describe Oystercard do
   let(:test_oystercard) { Oystercard.new }
+  before(:each) do
+    test_oystercard.top_up(10)
+  end
 
   context 'balance' do
     it 'has a default balance of £0' do
@@ -32,9 +35,6 @@ RSpec.describe Oystercard do
 
   describe '#deduct' do
     let(:amount) { 5 }
-    before(:each) do
-      test_oystercard.top_up(10)
-    end
 
     it "returns beep after deducting specified amount" do
       
@@ -47,15 +47,22 @@ RSpec.describe Oystercard do
   end
 
   context 'when on a journey' do
-    it 'should register when in use' do
-      test_oystercard.touch_in
-      expect(test_oystercard.in_journey?).to be true
+    describe '#touch_in' do
+      it 'should register when in use' do
+        test_oystercard.touch_in
+        expect(test_oystercard.in_journey?).to be true
+      end
+
+      it "raise error when touching in with balance below £1" do
+        expect{subject.touch_in}.to raise_error(Oystercard::INSUFFICIENT_FUNDS)
+      end
     end
-    
+
     it 'should not be in use once a journey is completed' do
       test_oystercard.touch_in
       test_oystercard.touch_out
       expect(test_oystercard.in_journey?).to be false
     end
   end
+
 end
