@@ -2,6 +2,8 @@ require 'oystercard'
 
 RSpec.describe Oystercard do
   let(:test_oystercard) { Oystercard.new }
+  let(:algate_station) { double(:station, name: :algate) }
+  
   before(:each) do
     test_oystercard.top_up(10)
   end
@@ -17,7 +19,7 @@ RSpec.describe Oystercard do
   end
 
   describe '#top_up' do
-    it "returns balance after topping up specified amount" do
+    it 'returns balance after topping up specified amount' do
       amount = 5
       expect(subject.top_up(amount)).to eq("card was topped up by £#{amount}")
     end
@@ -35,30 +37,27 @@ RSpec.describe Oystercard do
 
   describe '#deduct' do
     let(:amount) { 5 }
-
-    # it "returns beep after deducting specified amount" do
-    #   expect(subject.deduct(amount)).to eq("beep")
-    # end
-
-    # it 'decreases the card balance by the specified amount' do
-    #   expect{test_oystercard.deduct(amount)}.to change { test_oystercard.balance }.by -amount
-    # end
   end
 
   context 'when on a journey' do
     describe '#touch_in' do
       it 'should register when in use' do
-        test_oystercard.touch_in
+        test_oystercard.touch_in(algate_station)
         expect(test_oystercard.in_journey?).to be true
       end
 
       it "raise error when touching in with balance below £1" do
-        expect{subject.touch_in}.to raise_error(Oystercard::INSUFFICIENT_FUNDS)
+        expect{subject.touch_in(algate_station)}.to raise_error(Oystercard::INSUFFICIENT_FUNDS)
+      end
+
+      it 'should register the entry station' do
+        test_oystercard.touch_in(algate_station)
+        expect(test_oystercard.entry_station).to eq algate_station.name
       end
     end
 
     it 'should not be in use once a journey is completed' do
-      test_oystercard.touch_in
+      test_oystercard.touch_in(algate_station)
       test_oystercard.touch_out
       expect(test_oystercard.in_journey?).to be false
     end
@@ -66,7 +65,7 @@ RSpec.describe Oystercard do
 
   context 'after a journey' do
     it 'should charge the card for the minumum fare' do
-      test_oystercard.touch_in
+      test_oystercard.touch_in(algate_station)
       expect { test_oystercard.touch_out }.to change { test_oystercard.balance }.by -Oystercard::MINIMUM_AMOUNT_FOR_JOURNEY
     end
   end

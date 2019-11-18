@@ -1,5 +1,5 @@
 class Oystercard
-  attr_reader :balance, :limit, :in_journey
+  attr_reader :balance, :limit, :in_journey, :entry_station
   
   MAXIMUM_LIMIT = 90
   MINIMUM_AMOUNT_FOR_JOURNEY = 1
@@ -10,6 +10,7 @@ class Oystercard
     @balance = 0
     @limit = MAXIMUM_LIMIT
     @in_journey = false
+    @entry_station
   end
 
   def top_up(amount)
@@ -19,8 +20,9 @@ class Oystercard
     "card was topped up by £#{amount}"
   end
 
-  def touch_in
+  def touch_in(station)
     raise INSUFFICIENT_FUNDS unless balance >= MINIMUM_AMOUNT_FOR_JOURNEY
+    @entry_station = station.name
     @in_journey = true
   end
 
@@ -39,3 +41,5 @@ class Oystercard
     @balance -= amount
     "beep"
   end
+
+end
