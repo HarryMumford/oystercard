@@ -51,10 +51,6 @@ RSpec.describe Oystercard do
         expect{subject.touch_in(algate_station)}.to raise_error(Oystercard::INSUFFICIENT_FUNDS)
       end
 
-      it 'should register the entry station' do
-        test_oystercard.touch_in(algate_station)
-        expect(test_oystercard.entry_station).to eq algate_station.name
-      end
     end   
   end
 
@@ -70,11 +66,6 @@ RSpec.describe Oystercard do
       expect { test_oystercard.touch_out(bank_station) }.to change { test_oystercard.balance }.by (-Oystercard::MINIMUM_AMOUNT_FOR_JOURNEY)
     end
 
-    it 'should register the exit station' do
-      test_oystercard.touch_in(algate_station)
-      test_oystercard.touch_out(bank_station)
-      expect(test_oystercard.exit_station).to eq bank_station.name
-    end
   end
   
   describe "journey history" do 
@@ -83,7 +74,7 @@ RSpec.describe Oystercard do
       test_oystercard.top_up(50)
       test_oystercard.touch_in(algate_station)
       test_oystercard.touch_out(bank_station)
-      expect(test_oystercard.list_journeys).to eq([{:entry_station => algate_station.name, :exit_station => bank_station.name}])
+      expect(test_oystercard.list_journeys).to eq([{:entry_station=>:algate, :entry_zone=>1, :exit_station=>:bank, :exit_zone=>2}])
     end
     
     it "should have a list of journeys empty as default" do
