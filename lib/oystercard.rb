@@ -17,7 +17,7 @@ class Oystercard
     raise CANNOT_EXCEED_MAXIMUM_LIMIT unless balance + amount <= MAXIMUM_LIMIT
 
     @balance += amount
-    "card was topped up by £#{amount}"
+    "card was topped up by £#{amount} and the current balance is £#{balance}"
   end
 
   def touch_in(station)
@@ -28,6 +28,7 @@ class Oystercard
 
   def touch_out
     deduct(MINIMUM_AMOUNT_FOR_JOURNEY)
+    @entry_station = nil
     @in_journey = false
   end
 

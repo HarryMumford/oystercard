@@ -21,7 +21,7 @@ RSpec.describe Oystercard do
   describe '#top_up' do
     it 'returns balance after topping up specified amount' do
       amount = 5
-      expect(subject.top_up(amount)).to eq("card was topped up by £#{amount}")
+      expect(subject.top_up(amount)).to eq("card was topped up by £#{amount} and the current balance is £#{subject.balance}")
     end
 
     it 'increases the card balance by the specified amount' do
@@ -66,7 +66,7 @@ RSpec.describe Oystercard do
   context 'after a journey' do
     it 'should charge the card for the minumum fare' do
       test_oystercard.touch_in(algate_station)
-      expect { test_oystercard.touch_out }.to change { test_oystercard.balance }.by -Oystercard::MINIMUM_AMOUNT_FOR_JOURNEY
+      expect { test_oystercard.touch_out }.to change { test_oystercard.balance }.by (-Oystercard::MINIMUM_AMOUNT_FOR_JOURNEY)
     end
   end
 
