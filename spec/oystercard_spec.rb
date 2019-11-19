@@ -3,6 +3,7 @@ require 'oystercard'
 RSpec.describe Oystercard do
   let(:test_oystercard) { Oystercard.new }
   let(:algate_station) { double(:station, name: :algate) }
+  let(:bank_station) { double(:station, name: :bank) }
   
   before(:each) do
     test_oystercard.top_up(10)
@@ -54,20 +55,25 @@ RSpec.describe Oystercard do
         test_oystercard.touch_in(algate_station)
         expect(test_oystercard.entry_station).to eq algate_station.name
       end
-    end
+    end   
+  end
 
+  describe '#touch_out' do
     it 'should not be in use once a journey is completed' do
       test_oystercard.touch_in(algate_station)
-      test_oystercard.touch_out
+      test_oystercard.touch_out(bank_station)
       expect(test_oystercard.in_journey?).to be false
     end
-  end
 
-  context 'after a journey' do
     it 'should charge the card for the minumum fare' do
       test_oystercard.touch_in(algate_station)
-      expect { test_oystercard.touch_out }.to change { test_oystercard.balance }.by (-Oystercard::MINIMUM_AMOUNT_FOR_JOURNEY)
+      expect { test_oystercard.touch_out(bank_station) }.to change { test_oystercard.balance }.by (-Oystercard::MINIMUM_AMOUNT_FOR_JOURNEY)
+    end
+
+    it 'should register the exit station' do
+      test_oystercard.touch_in(algate_station)
+      test_oystercard.touch_out(bank_station)
+      expect(test_oystercard.exit_station).to eq bank_station.name
     end
   end
-
 end
