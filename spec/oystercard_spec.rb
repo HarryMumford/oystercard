@@ -76,4 +76,19 @@ RSpec.describe Oystercard do
       expect(test_oystercard.exit_station).to eq bank_station.name
     end
   end
+  
+  describe "journey history" do 
+    
+    it "should save a list of journeys"do
+      test_oystercard.top_up(50)
+      test_oystercard.touch_in(algate_station)
+      test_oystercard.touch_out(bank_station)
+      expect(test_oystercard.list_journeys).to eq({:entry_station => algate_station.name, :exit_station => bank_station.name})
+    end
+    
+    it "should have a list of journeys empty as default" do
+      expect(test_oystercard.list_journeys.empty?).to eq true
+    end
+    
+  end
 end
