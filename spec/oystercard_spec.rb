@@ -2,14 +2,15 @@ require 'oystercard'
 
 RSpec.describe Oystercard do
   let(:test_oystercard) { Oystercard.new }
-  let(:algate_station) { double(:station, name: :algate, zone: 1) }
-  let(:bank_station) { double(:station, name: :bank, zone: 2) }
+  let(:algate_station) { double("entry station", name: :algate, zone: 1) }
+  let(:bank_station) { double("exit station", name: :bank, zone: 2) }
   
   before(:each) do
     test_oystercard.top_up(10)
   end
 
   context 'balance' do
+   
     it 'has a default balance of £0' do
       expect(subject.balance).to be 0
     end

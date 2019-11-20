@@ -1,5 +1,13 @@
 require './lib/oystercard.rb'
 require './lib/station.rb'
+require './lib/journey.rb'
+
+journey1 = Journey.new
+
+
+
+
+
 card = Oystercard.new
 entry_station = Station.new("algate", 1)
 exit_station = Station.new("bank", 2)
@@ -15,12 +23,3 @@ card.touch_out(exit_station)
 card.list_journeys
 
 
-journey1 = Journey.new(entry = nil, exit = nil)
-
-
-class Journey
-  def initialize(entry, exit)
-    #default is nil
-    #touch in - touch out 
-  end
-end
