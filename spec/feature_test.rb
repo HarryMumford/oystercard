@@ -14,3 +14,13 @@ card.touch_in(entry_station)
 card.touch_out(exit_station)
 card.list_journeys
 
+
+journey1 = Journey.new(entry = nil, exit = nil)
+
+
+class Journey
+  def initialize(entry, exit)
+    #default is nil
+    #touch in - touch out 
+  end
+end
