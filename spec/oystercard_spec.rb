@@ -17,24 +17,26 @@ RSpec.describe Oystercard do
     it 'has a maximum limit' do
       expect(subject.limit).to be Oystercard::MAXIMUM_LIMIT
     end
+
+    describe '#top_up' do
+      it 'returns balance after topping up specified amount' do
+        amount = 5
+        expect(subject.top_up(amount)).to eq("card was topped up by £#{amount} and the current balance is £#{subject.balance}")
+      end
+
+      it 'increases the card balance by the specified amount' do
+        expect { subject.top_up(10) }.to change { subject.balance }.by 10
+      end
+
+      it 'should not allow a user to exceed the limit' do
+        almost_full_oyster = Oystercard.new
+        almost_full_oyster.top_up(Oystercard::MAXIMUM_LIMIT - 3)
+        expect { almost_full_oyster.top_up(5) }.to raise_error Oystercard::CANNOT_EXCEED_MAXIMUM_LIMIT
+      end
+    end
   end
 
-  describe '#top_up' do
-    it 'returns balance after topping up specified amount' do
-      amount = 5
-      expect(subject.top_up(amount)).to eq("card was topped up by £#{amount} and the current balance is £#{subject.balance}")
-    end
 
-    it 'increases the card balance by the specified amount' do
-      expect { subject.top_up(10) }.to change { subject.balance }.by 10
-    end
-
-    it 'should not allow a user to exceed the limit' do
-      almost_full_oyster = Oystercard.new
-      almost_full_oyster.top_up(Oystercard::MAXIMUM_LIMIT - 3)
-      expect { almost_full_oyster.top_up(5) }.to raise_error Oystercard::CANNOT_EXCEED_MAXIMUM_LIMIT
-    end
-  end
 
   describe '#deduct' do
     let(:amount) { 5 }
@@ -50,22 +52,20 @@ RSpec.describe Oystercard do
       it "raise error when touching in with balance below £1" do
         expect{subject.touch_in(algate_station)}.to raise_error(Oystercard::INSUFFICIENT_FUNDS)
       end
-
     end   
-  end
+  
+    describe '#touch_out' do
+      it 'should not be in use once a journey is completed' do
+        test_oystercard.touch_in(algate_station)
+        test_oystercard.touch_out(bank_station)
+        expect(test_oystercard.in_journey?).to be false
+      end
 
-  describe '#touch_out' do
-    it 'should not be in use once a journey is completed' do
-      test_oystercard.touch_in(algate_station)
-      test_oystercard.touch_out(bank_station)
-      expect(test_oystercard.in_journey?).to be false
+      it 'should charge the card for the minumum fare' do
+        test_oystercard.touch_in(algate_station)
+        expect { test_oystercard.touch_out(bank_station) }.to change { test_oystercard.balance }.by (-Oystercard::MINIMUM_AMOUNT_FOR_JOURNEY)
+     end
     end
-
-    it 'should charge the card for the minumum fare' do
-      test_oystercard.touch_in(algate_station)
-      expect { test_oystercard.touch_out(bank_station) }.to change { test_oystercard.balance }.by (-Oystercard::MINIMUM_AMOUNT_FOR_JOURNEY)
-    end
-
   end
   
   describe "journey history" do 
@@ -80,7 +80,7 @@ RSpec.describe Oystercard do
     it "should have a list of journeys empty as default" do
       expect(test_oystercard.list_journeys.empty?).to eq true
     end
-    
-    
   end
 end
+
+
