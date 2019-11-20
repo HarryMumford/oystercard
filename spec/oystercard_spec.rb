@@ -36,8 +36,6 @@ RSpec.describe Oystercard do
     end
   end
 
-
-
   describe '#deduct' do
     let(:amount) { 5 }
   end
