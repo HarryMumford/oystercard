@@ -23,26 +23,8 @@ describe Journey do
         expect(subject.complete?).to eq true
       end
     end
-  
   end
 
-<<<<<<< HEAD
-
-  describe "#fare" do
-    it "has a minimum fare of one pound" do
-      journey.entry(:aldgate_station)
-      journey.exit(:bank_station)
-      expect(journey.fare).to eq Journey::MINIMUM_FARE
-    end
-  end
-  # context "journey has not been completed" do
-  #   describe "#complete?" do
-  #     it "returns false if the journey is  not complete" do
-  #       expect(journey.complete?).to eq false
-  #     end
-  #   end
-  # end
-=======
   context "journey has not been completed" do
     describe "#complete?" do
       it "returns false if no entry station" do
@@ -78,5 +60,4 @@ describe Journey do
       expect(subject.fare).to eq Journey::PENALTY_FARE
     end
   end
->>>>>>> testing_branch
 end

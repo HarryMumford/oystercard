@@ -16,8 +16,8 @@ class Journey
     !entry_station.nil? && !exit_station.nil?
   end
   
-  def fare(fare = MINIMUM_FARE)
-    complete? ? fare : 6
+  def fare
+    complete? ? MINIMUM_FARE : PENALTY_FARE
   end
 
 end
