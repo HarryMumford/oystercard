@@ -8,15 +8,13 @@ class Oystercard
 
   def initialize
     @balance = 0
-    @limit = MAXIMUM_LIMIT
-    @in_journey = false
     @list_journeys = []
     @journey = {}
+    @journey_instance = Journey.new
   end
 
   def top_up(amount)
     raise CANNOT_EXCEED_MAXIMUM_LIMIT unless balance + amount <= MAXIMUM_LIMIT
-
     @balance += amount
     "card was topped up by £#{amount} and the current balance is £#{balance}"
   end
@@ -26,6 +24,7 @@ class Oystercard
     @journey[:entry_station] = station.name
     @journey[:entry_zone] = station.zone
     @in_journey = true
+    @journey_instance.enter(station)
   end
 
   def touch_out(station)
@@ -35,6 +34,11 @@ class Oystercard
     @journey[:exit_zone] = station.zone
     @list_journeys << journey
     @journey = {}
+    @journey_instance.exit(station)
+  end
+
+  def valid_journey?
+    @journey_instance.complete?
   end
 
   def in_journey?

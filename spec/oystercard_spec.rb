@@ -15,10 +15,6 @@ RSpec.describe Oystercard do
       expect(subject.balance).to be 0
     end
 
-    it 'has a maximum limit' do
-      expect(subject.limit).to be Oystercard::MAXIMUM_LIMIT
-    end
-
     describe '#top_up' do
       it 'returns balance after topping up specified amount' do
         amount = 5
