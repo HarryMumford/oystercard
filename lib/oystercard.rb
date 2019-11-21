@@ -10,7 +10,7 @@ class Oystercard
     @balance = 0
     @list_journeys = []
     @journey = {}
-    @journey_instance = Journey.new
+    # @journey_instance = Journey.new
   end
 
   def top_up(amount)
@@ -21,6 +21,7 @@ class Oystercard
 
   def touch_in(station)
     raise INSUFFICIENT_FUNDS unless balance >= MINIMUM_AMOUNT_FOR_JOURNEY
+    @journey_instance = Journey.new
     @journey[:entry_station] = station.name
     @journey[:entry_zone] = station.zone
     @in_journey = true
