@@ -1,20 +1,16 @@
 class Journey
+  attr_reader :entry_station, :exit_station
 
-MINIMUM_FARE = 1
-
-  def entry(station)
-    @in = station
+  def enter(station)
+    @entry_station = station
   end
 
   def exit(station)
-    @out = station
+    @exit_station = station
   end
 
   def complete?
-    !@in.empty? && !@out.empty?
+    !entry_station.nil? && !exit_station.nil?
   end
-
-  def fare
-    return MINIMUM_FARE
-  end
+  
 end

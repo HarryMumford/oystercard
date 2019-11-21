@@ -4,28 +4,26 @@ describe Journey do
 
   let(:aldgate_station) { double("entry station", name: :aldgate, zone: 1) }
   let(:bank_station) { double("exit station", name: :bank, zone: 2) }
-  journey = Journey.new
+
+  it 'knows its entry station' do
+    subject.enter(aldgate_station)                    
+    expect(subject.entry_station).to eq(aldgate_station)              
+  end          
+  
+  it 'knows its entry station' do   
+    subject.exit(bank_station)                  
+    expect(subject.exit_station).to eq(bank_station)              
+  end      
 
   context "journey has been completed" do
-    #describe "#complete?" do
+    describe "#complete?" do
       it "returns true if the journey is complete" do
-        journey.entry(:aldgate_station)
-        journey.exit(:bank_station)
-        expect(journey.complete?).to eq true
+        subject.exit(bank_station)  
+        subject.entry_station   
+        expect(subject.complete?).to eq true
       end
-    #end
-
-    ##describe "#entry?" do
-      it "returns true if card has entry station" do
-        expect(journey.entry("aldgate")).to eq "aldgate"
-      end
-    #end
-
-    ##describe "#exit?" do
-      it "returns true if card has exit station" do
-        expect(journey.exit("aldgate")).to eq "aldgate"
-      end
-    #end
+    end
+  
   end
 
 
