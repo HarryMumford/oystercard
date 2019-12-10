@@ -17,8 +17,6 @@ class JourneyLog
     journey = nil
   end
 
-  private
-
   def current_journey
     journey
   end

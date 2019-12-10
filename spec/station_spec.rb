@@ -1,5 +1,6 @@
 require 'station' 
 
+
 describe Station do
   subject {described_class.new("algate", 1)}
 

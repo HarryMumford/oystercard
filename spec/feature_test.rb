@@ -9,7 +9,6 @@ exit_station = Station.new("bank", 2)
 jl = JourneyLog.new
 jl.start(entry_station)
 jl.finish(exit_station)
-jl.journeys
 
 
 
